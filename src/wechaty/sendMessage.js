@@ -25,19 +25,18 @@ export async function defaultMessage(msg, bot) {
   if (isText && !isBotSelf) {
     console.log(JSON.stringify(msg))
     if ((Date.now() - 1e3 * msg.payload.timestamp) > 3000) return 
-    if (!content.startsWith('? ') && !content.startsWith('？ ') && !content.startsWith('> ')) return 
+    //if (!content.startsWith('? ') && !content.startsWith('？ ') && !content.startsWith('> ')) return 
     try {
-      const trimed = content.substr(2)
-      if (trimed.length < 5) return 
-      
+      const trimed = content // no need to trim actually
+      if (trimed.length < 2) return // originally 5
       // 区分群聊和私聊
       if (isRoom && room) {
-        await room.say(await getReply(trimed.replace(`${botName}`, '')))
+        await room.say(await getReply(name, trimed.replace(`${botName}`, '')))
         return
       }
       // 私人聊天，白名单内的直接发送
       if (isAlias && !room) {
-        await contact.say(await getReply(trimed))
+        await contact.say(await getReply(name, trimed))
       }
     } catch (e) {
       console.error(e)
